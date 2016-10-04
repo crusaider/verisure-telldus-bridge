@@ -4,6 +4,7 @@
   "description": "Bridging between the Verisure home alarm system and the Telldus Live API - bringing over informaiton about alarm status to the Telldus syste.",
   "main": "src/server.js",
   "scripts": {
+    "start": "node src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
