@@ -1,0 +1,3 @@
+[submodule "verisure-api"]
+	path = verisure-api
+	url = git@github.com:crusaider/verisure-api.git

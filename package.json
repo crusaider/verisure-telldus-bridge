@@ -1,0 +1,22 @@
+{
+  "name": "verisure-telldus-bridge",
+  "version": "0.1.0",
+  "description": "Bridging between the Verisure home alarm system and the Telldus Live API - bringing over informaiton about alarm status to the Telldus syste.",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "home-automation",
+    "verisure",
+    "telldus"
+  ],
+  "author": "jonas.m.andreasson@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "dateformat": "^1.0.12",
+    "telldus-live-promise": "^1.0.3",
+    "verisure-api": "file:verisure-api",
+    "winston": "^2.2.0"
+  }
+}
