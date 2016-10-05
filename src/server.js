@@ -1,5 +1,9 @@
 /**
  * Application main entrypoint starting the server.
+ *
+ * @author Jonas
+ * @license MIT
+ *
  */
 'use strict';
 
