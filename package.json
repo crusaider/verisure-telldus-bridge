@@ -16,6 +16,7 @@
   "license": "MIT",
   "dependencies": {
     "dateformat": "^1.0.12",
+    "node-cleanup": "^1.0.1",
     "telldus-live-promise": "^1.0.3",
     "verisure-api": "file:verisure-api",
     "winston": "^2.2.0"

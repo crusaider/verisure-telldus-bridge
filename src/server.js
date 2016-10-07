@@ -19,6 +19,16 @@ logger.info("Telldus armed home device: %s", process.env.TELLDUS_ARMEDHOME_DEVIC
 logger.info("Telldus armed away device: %s", process.env.TELLDUS_ARMEDAWAY_DEVICE ? process.env.TELLDUS_ARMEDAWAY_DEVICE : "Is NOT set");
 logger.info("============================================================");
 
+
+// Install process exit handler
+var nodeCleanup = require('node-cleanup');
+
+nodeCleanup(function() {
+  logger.info("Process Exiting");
+});
+
+
+
 var verisureConfig = {
   username: process.env.VERISURE_USER,
   password: process.env.VERISURE_PASSWORD
