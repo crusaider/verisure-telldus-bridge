@@ -5,20 +5,33 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "watch": "./node_modules/.bin/mocha -w --reporter spec"
   },
   "keywords": [
-    "home-automation",
+    "home automation",
     "verisure",
     "telldus"
   ],
   "author": "jonas.m.andreasson@gmail.com",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crusaider/verisure-telldus-bridge/issues",
+    "email": "jonas.m.andreasson@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crusaider/verisure-telldus-bridge"
+  },
   "dependencies": {
     "dateformat": "^1.0.12",
     "node-cleanup": "^1.0.1",
     "telldus-live-promise": "^1.0.3",
     "verisure-api": "file:verisure-api",
     "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.0"
   }
 }

@@ -1,8 +1,13 @@
 /**
  * Application main entrypoint starting the server.
+ *
+ * @author Jonas
+ * @license MIT
+ *
  */
 'use strict';
 
+var history = require('./history');
 var logger = require('./logger');
 
 logger.info("============================================================");
@@ -54,6 +59,15 @@ var telldus = require('telldus-live-promise');
 var api = telldus.API(telldusConfig);
 var devices = telldus.Devices(api);
 
+var currentAlarmState = undefined;
+
+// Subscribe to alarm state changes
+verisureApi.on('alarmChange', updateTelldus);
+
+
+// Log a event that the app has started
+history.logEvent('Application started');
+
 /**
  * Called when a change in alarm status is detected, toggles the state
  * of given telldus dvices depending on the new alarm state.
@@ -63,54 +77,102 @@ var devices = telldus.Devices(api);
 function updateTelldus(data) {
   logger.info("Alarm state changed, new state is [%s]", data.status);
 
+  history.logEvent( 'Alarm state changed from ' + currentAlarmState +
+    ' to ' + data.status);
+
   switch (data.status) {
     case 'unarmed':
-      devices.turnOff(armedHomeDevice).then(
-        function (response) {
-          logger.info("Armed home device set to off");
-        },
-        function (response) {
-          logger.error("Could not change state of armed home device, result", response);
-        }
-      )
-
-      devices.turnOff(armedAwayDevice).then(
-        function (response) {
-          logger.info("Armed away device set to off");
-        },
-        function (response) {
-          logger.error("Could not change state of armed away device, result", response);
-        }
-      )
+      switch (currentAlarmState) {
+        case undefined:
+          setDeviceState(armedHomeDevice, 'off');
+          setDeviceState(armedAwayDevice, 'off');
+          break;
+        case 'unarmed':
+          break;
+        case 'armedhome':
+          setDeviceState(armedHomeDevice, 'off');
+          break;
+        case 'armedaway':
+          setDeviceState(armedAwayDevice, 'off');
+          break;
+      }
       break;
 
     case 'armedhome':
-      devices.turnOn(armedHomeDevice).then(
-        function (response) {
-          logger.info("Armed home device set to on");
-        },
-        function (response) {
-          logger.error("Could not change state of armed home device, result", response);
-        }
-      )
+      switch (currentAlarmState) {
+        case undefined:
+          setDeviceState(armedHomeDevice, 'on');
+          setDeviceState(armedAwayDevice, 'off');
+          break;
+        case 'unarmed':
+          setDeviceState(armedHomeDevice, 'on');
+          break;
+        case 'armedhome':
+          break;
+        case 'armedaway':
+          setDeviceState(armedHomeDevice, 'on');
+          setDeviceState(armedAwayDevice, 'off');
+          break;
+      }
       break;
 
     case 'armedaway':
-      devices.turnOn(armedAwayDevice).then(
-        function (response) {
-          logger.info("Armed away device set to on");
-        },
-        function (response) {
-          logger.error("Could not change state of armed away device, result", response);
-        }
-      )
+      switch (currentAlarmState) {
+        case undefined:
+          setDeviceState(armedHomeDevice, 'off');
+          setDeviceState(armedAwayDevice, 'on');
+          break;
+        case 'unarmed':
+          setDeviceState(armedAwayDevice, 'on');
+          break;
+        case 'armedhome':
+          setDeviceState(armedHomeDevice, 'off');
+          setDeviceState(armedAwayDevice, 'on');
+          break;
+        case 'armedaway':
+          break;
+      }
       break;
 
     default:
-      logger.error("Got unknown alarm state [%s]", data.status );
+      logger.error("Got unknown alarm state [%s]", data.status);
 
+  }
+
+  currentAlarmState = data.status;
+}
+
+/**
+ * Sets state of a verisure device and logs the result
+ *
+ * @param {any} device - ID of the device to set state of
+ * @param {any} state - The state to set can be 'on' or 'off'
+ */
+function setDeviceState(device, state) {
+  switch (state) {
+    case 'on':
+      devices.turnOn(device).then(
+        function (response) {
+          logger.debug("Device %s set to on", device);
+        },
+        function (response) {
+          logger.error("Could not set state of device %s to on, response",
+            device, response);
+        });
+      break;
+    case 'off':
+      devices.turnOff(device).then(
+        function (response) {
+          logger.debug("Device %s set to off", device);
+        },
+        function (response) {
+          logger.error("Could not set state of device %s to on, response",
+            device, response);
+        });
+      break;
+    default:
+      logger.error("Unknow device state %s", state);
   }
 }
 
-// Subscribe to alarm state changes
-verisureApi.on('alarmChange', updateTelldus);
+

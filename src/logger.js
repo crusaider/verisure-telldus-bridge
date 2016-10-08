@@ -1,8 +1,16 @@
-//
-//
-// Stolen with pride from: http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
-//
-//
+/**
+ * Configure logger for the application
+ *
+ * Loglevel can be set trough enviroment variable 'LOGLEVEL', defaults
+ * to 'info'.
+ *
+ * Stolen with pride from: http://tostring.it/2014/06/23/advanced-logging-with-nodejs/
+ *
+ * @author Jonas
+ * @license MIT
+ *
+ */
+
 'use strict';
 
 var logLevel = process.env.LOGLEVEL || 'info';
