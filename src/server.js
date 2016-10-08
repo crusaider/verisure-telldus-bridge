@@ -49,8 +49,12 @@ var telldus = require('telldus-live-promise');
 var api = telldus.API(telldusConfig);
 var devices = telldus.Devices(api);
 
+var currentAlarmState = undefined;
+
 // Subscribe to alarm state changes
 verisureApi.on('alarmChange', updateTelldus);
+
+
 
 /**
  * Called when a change in alarm status is detected, toggles the state
@@ -63,22 +67,64 @@ function updateTelldus(data) {
 
   switch (data.status) {
     case 'unarmed':
-      setDeviceState(armedHomeDevice, 'off');
-      setDeviceState(armedAwayDevice, 'off');
+      switch (currentAlarmState) {
+        case undefined:
+          setDeviceState(armedHomeDevice, 'off');
+          setDeviceState(armedAwayDevice, 'off');
+          break;
+        case 'unarmed':
+          break;
+        case 'armedhome':
+          setDeviceState(armedHomeDevice, 'off');
+          break;
+        case 'armedaway':
+          setDeviceState(armedAwayDevice, 'off');
+          break;
+      }
       break;
 
     case 'armedhome':
-      setDeviceState(armedHomeDevice, 'on');
+      switch (currentAlarmState) {
+        case undefined:
+          setDeviceState(armedHomeDevice, 'on');
+          setDeviceState(armedAwayDevice, 'off');
+          break;
+        case 'unarmed':
+          setDeviceState(armedHomeDevice, 'on');
+          break;
+        case 'armedhome':
+          break;
+        case 'armedaway':
+          setDeviceState(armedHomeDevice, 'on');
+          setDeviceState(armedAwayDevice, 'off');
+          break;
+      }
       break;
 
     case 'armedaway':
-      setDeviceState(armedAwayDevice, 'on');
+      switch (currentAlarmState) {
+        case undefined:
+          setDeviceState(armedHomeDevice, 'off');
+          setDeviceState(armedAwayDevice, 'on');
+          break;
+        case 'unarmed':
+          setDeviceState(armedAwayDevice, 'on');
+          break;
+        case 'armedhome':
+          setDeviceState(armedHomeDevice, 'off');
+          setDeviceState(armedAwayDevice, 'on');
+          break;
+        case 'armedaway':
+          break;
+      }
       break;
 
     default:
       logger.error("Got unknown alarm state [%s]", data.status);
 
   }
+
+  currentAlarmState = data.status;
 }
 
 /**
