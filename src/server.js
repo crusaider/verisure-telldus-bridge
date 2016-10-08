@@ -55,6 +55,8 @@ var currentAlarmState = undefined;
 verisureApi.on('alarmChange', updateTelldus);
 
 
+// Log a event that the app has started
+history.logEvent('Application started');
 
 /**
  * Called when a change in alarm status is detected, toggles the state
@@ -64,6 +66,9 @@ verisureApi.on('alarmChange', updateTelldus);
  */
 function updateTelldus(data) {
   logger.info("Alarm state changed, new state is [%s]", data.status);
+
+  history.logEvent( 'Alarm state changed from ' + currentAlarmState +
+    ' to ' + data.status);
 
   switch (data.status) {
     case 'unarmed':
