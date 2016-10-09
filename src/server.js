@@ -36,7 +36,8 @@ nodeCleanup(function() {
 
 var verisureConfig = {
   username: process.env.VERISURE_USER,
-  password: process.env.VERISURE_PASSWORD
+  password: process.env.VERISURE_PASSWORD,
+  onError: onVerisureError
 };
 
 var verisureApi = require('verisure-api').setup(verisureConfig);
@@ -177,6 +178,16 @@ function setDeviceState(device, state) {
     default:
       logger.error("Unknow device state %s", state);
   }
+}
+
+/**
+ * Called when the verisure error module runs into a error calling the
+ * verisure service.
+ *
+ * @param {any} error
+ */
+function onVerisureError( error ) {
+  logger.error("Verisure error:", error);
 }
 
 
