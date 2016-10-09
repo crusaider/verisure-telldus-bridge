@@ -32,4 +32,5 @@ nodeCleanup(function() {
   logger.info("Process Exiting");
 });
 
+// Start the brigde module
 require('./bridge');
