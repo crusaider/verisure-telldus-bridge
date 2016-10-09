@@ -1,6 +1,6 @@
 {
   "name": "verisure-telldus-bridge",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bridging between the Verisure home alarm system and the Telldus Live API - bringing over informaiton about alarm status to the Telldus syste.",
   "main": "src/server.js",
   "scripts": {
