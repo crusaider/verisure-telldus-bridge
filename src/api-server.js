@@ -29,7 +29,7 @@ webapp.use(require('./request-logger'));
 // webapp.use('/node_modules', express.static('./node_modules'));
 
 // Set up routes for the API
-// webapp.use('/api', require('./api/events'));
+webapp.use('/api', require('./api/events'));
 
 // Start the HTTP server
 var server = http.createServer(webapp).listen(port);
