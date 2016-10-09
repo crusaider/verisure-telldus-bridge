@@ -34,3 +34,6 @@ nodeCleanup(function() {
 
 // Start the brigde module
 require('./bridge');
+
+// Start the web server
+require('./api-server');
