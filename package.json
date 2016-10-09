@@ -24,7 +24,9 @@
     "url": "https://github.com/crusaider/verisure-telldus-bridge"
   },
   "dependencies": {
+    "body-parser": "^1.15.2",
     "dateformat": "^1.0.12",
+    "express": "^4.14.0",
     "node-cleanup": "^1.0.1",
     "telldus-live-promise": "^1.0.3",
     "verisure-api": "file:verisure-api",
