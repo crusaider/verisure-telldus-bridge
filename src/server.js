@@ -75,8 +75,12 @@ history.logEvent('Application started');
  * @param {object} data - The alarm status info object
  */
 function updateTelldus(data) {
-  logger.info("Alarm state changed, new state is [%s]", data.status);
 
+  if ( currentAlarmState ) {
+    logger.info("Alarm state changed, new state is [%s]", data.status);
+  } else {
+    logger.info("Current state unknown, will be set to [%s]", data.status);
+  }
   history.logEvent( 'Alarm state changed from ' + currentAlarmState +
     ' to ' + data.status);
 
@@ -92,7 +96,7 @@ function updateTelldus(data) {
         case 'armedhome':
           setDeviceState(armedHomeDevice, 'off');
           break;
-        case 'armedaway':
+        case 'armed':
           setDeviceState(armedAwayDevice, 'off');
           break;
       }
@@ -109,14 +113,14 @@ function updateTelldus(data) {
           break;
         case 'armedhome':
           break;
-        case 'armedaway':
+        case 'armed':
           setDeviceState(armedHomeDevice, 'on');
           setDeviceState(armedAwayDevice, 'off');
           break;
       }
       break;
 
-    case 'armedaway':
+    case 'armed':
       switch (currentAlarmState) {
         case undefined:
           setDeviceState(armedHomeDevice, 'off');
@@ -129,7 +133,7 @@ function updateTelldus(data) {
           setDeviceState(armedHomeDevice, 'off');
           setDeviceState(armedAwayDevice, 'on');
           break;
-        case 'armedaway':
+        case 'armed':
           break;
       }
       break;
